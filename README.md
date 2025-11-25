@@ -47,7 +47,7 @@
 bash <(curl -sL https://raw.githubusercontent.com/bwwq/arknights-blog/master/deploy.sh)
 ```
 
-脚本将自动完成：环境安装(Node.js/Git/PM2)、代码拉取、依赖构建、服务启动及 Nginx 配置。
+脚本将自动完成：环境安装(Node.js/Git/PM2)、代码拉取、依赖构建、服务启动。
 
 ### 手动安装
 
