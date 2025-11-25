@@ -51,7 +51,8 @@ const Setup = ({ onComplete }) => {
             // 保存配置
             await axios.post(`${config.API_URL}/api/setup/initialize`, {
                 githubUsername: formData.githubUsername,
-                adminPassword: formData.adminPassword
+                adminPassword: formData.adminPassword,
+                githubToken: formData.githubToken
             });
 
             setStep(3);
@@ -104,6 +105,37 @@ const Setup = ({ onComplete }) => {
                                 <small className="text-gray">
                                     将用于获取您的 GitHub 头像、仓库列表等信息
                                 </small>
+                            </div>
+
+                            <div className="input-group">
+                                <label className="text-mono">
+                                    GitHub Token (可选)
+                                    <span className="badge-optional">推荐</span>
+                                </label>
+                                <input
+                                    type="password"
+                                    name="githubToken"
+                                    className="rhodes-input"
+                                    value={formData.githubToken || ''}
+                                    onChange={handleChange}
+                                    placeholder="ghp_..."
+                                />
+                                <div className="token-help">
+                                    <small className="text-gray">
+                                        用于提高 API 限流阈值（未认证每小时60次，认证后5000次）。
+                                        <br />
+                                        <details>
+                                            <summary style={{ cursor: 'pointer', color: 'var(--rhodes-cyan)' }}>如何获取 Token?</summary>
+                                            <ol style={{ paddingLeft: '20px', marginTop: '5px' }}>
+                                                <li>访问 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--rhodes-cyan)' }}>GitHub Tokens 设置</a></li>
+                                                <li>点击 "Generate new token (classic)"</li>
+                                                <li>Note 填 "Blog API"，Expiration 选 "No expiration"</li>
+                                                <li>Scopes 只勾选 <code>public_repo</code> (或不勾选)</li>
+                                                <li>点击生成并复制 Token 到此处</li>
+                                            </ol>
+                                        </details>
+                                    </small>
+                                </div>
                             </div>
 
                             {error && <div className="error-msg text-orange">{error}</div>}

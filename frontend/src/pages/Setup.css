@@ -286,3 +286,27 @@
         flex-direction: column;
     }
 }
+
+.badge-optional {
+    display: inline-block;
+    background: var(--rhodes-gray-dim);
+    color: var(--rhodes-cyan);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.token-help {
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.token-help code {
+    background: #333;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    color: var(--rhodes-orange);
+}

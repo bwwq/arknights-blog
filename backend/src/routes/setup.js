@@ -60,7 +60,7 @@ router.get('/status', (req, res) => {
 
 // POST /api/setup/initialize - Initialize system
 router.post('/initialize', (req, res) => {
-    const { githubUsername, adminPassword } = req.body;
+    const { githubUsername, adminPassword, githubToken } = req.body;
 
     // Validation
     if (!githubUsername || !githubUsername.trim()) {
@@ -82,6 +82,12 @@ router.post('/initialize', (req, res) => {
 
         // Update .env file with admin password
         updateEnvFile('ADMIN_PASSWORD', adminPassword);
+
+        // Update GitHub Token if provided
+        if (githubToken && githubToken.trim()) {
+            updateEnvFile('GITHUB_TOKEN', githubToken.trim());
+            process.env.GITHUB_TOKEN = githubToken.trim();
+        }
 
         // Update process.env
         process.env.ADMIN_PASSWORD = adminPassword;
