@@ -39,12 +39,17 @@ router.get('/user', async (req, res) => {
             return res.json(cached);
         }
 
-        const { data } = await octokit.users.getByUsername({ username });
+        console.log('Fetching GitHub user:', username);
+        const { data } = await octokit.rest.users.getByUsername({ username });
         cache.set(cacheKey, data);
         res.json(data);
     } catch (error) {
-        console.error('GitHub API Error:', error);
-        res.status(500).json({ error: 'Failed to fetch GitHub user data' });
+        console.error('GitHub API Error:', error.message);
+        console.error('Error details:', error.response?.data);
+        res.status(500).json({
+            error: 'Failed to fetch GitHub user data',
+            details: error.message
+        });
     }
 });
 
@@ -60,11 +65,12 @@ router.get('/user/:username', async (req, res) => {
             return res.json(cached);
         }
 
-        const { data } = await octokit.users.getByUsername({ username });
+        const { data } = await octokit.rest.users.getByUsername({ username });
         cache.set(cacheKey, data);
         res.json(data);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch GitHub user data' });
+        console.error('GitHub user fetch error:', error.message);
+        res.status(500).json({ error: 'Failed to fetch GitHub user data', details: error.message });
     }
 });
 
@@ -79,7 +85,7 @@ router.get('/repos/:username', async (req, res) => {
             return res.json(cached);
         }
 
-        const { data } = await octokit.repos.listForUser({
+        const { data } = await octokit.rest.repos.listForUser({
             username,
             sort: 'updated',
             per_page: 10
@@ -87,7 +93,8 @@ router.get('/repos/:username', async (req, res) => {
         cache.set(cacheKey, data);
         res.json(data);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch GitHub repos' });
+        console.error('GitHub repos fetch error:', error.message);
+        res.status(500).json({ error: 'Failed to fetch GitHub repos', details: error.message });
     }
 });
 
@@ -102,15 +109,15 @@ router.get('/events/:username', async (req, res) => {
             return res.json(cached);
         }
 
-        const { data } = await octokit.activity.listPublicEventsForUser({
+        const { data } = await octokit.rest.activity.listPublicEventsForUser({
             username,
             per_page: 100
         });
         cache.set(cacheKey, data);
         res.json(data);
     } catch (error) {
-        console.error('Failed to fetch GitHub events:', error);
-        res.status(500).json({ error: 'Failed to fetch GitHub events' });
+        console.error('Failed to fetch GitHub events:', error.message);
+        res.status(500).json({ error: 'Failed to fetch GitHub events', details: error.message });
     }
 });
 
