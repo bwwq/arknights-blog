@@ -1,155 +1,151 @@
-# 明日方舟风格博客 | Arknights Blog
+# 罗德岛终端 | Rhodes Island Terminal
 
-一个以《明日方舟》游戏UI为灵感的全栈个人博客平台，featuring实时服务器监控、Markdown博客系统、GitHub集成和角色展示。
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-19-61dafb.svg?style=flat&logo=react)
+![Node](https://img.shields.io/badge/Node.js-v18+-339933.svg?style=flat&logo=node.js)
+![Style](https://img.shields.io/badge/Style-Arknights-orange.svg)
 
-## ✨ 特色功能
+> **"博士，欢迎回到罗德岛。"**
 
-- 🎨 **明日方舟UI风格**：完整还原游戏界面的设计语言
-  - 标志性橙黑配色
-  - 切角设计元素
-  - 扫描线、故障效果等动画
-  - HUD风格数据面板
+一个深度还原《明日方舟》游戏UI风格的全栈个人博客系统。不仅仅是皮肤，更是从交互到动画的完整复刻。
 
-- 📊 **实时服务器监控**：WebSocket实时推送CPU和内存使用率
-- 📝 **Markdown博客系统**：内置SimpleMDE编辑器
-- 🔗 **GitHub自动集成**：自动获取并展示你的GitHub仓库和统计数据
-- 🎮 **角色展示**：完整角色卡片，数据可自定义
+---
+
+## ✨ 核心特性
+
+### 🎨 极致还原的 UI 设计
+- **沉浸式体验**：标志性的橙黑配色、切角设计、扫描线与故障艺术效果。
+- **动态交互**：打字机效果、HUD 数据面板、平滑的过渡动画。
+- **响应式布局**：完美适配桌面端与移动端，随时随地访问终端。
+
+### 🛠️ 强大的功能模块
+- **🚀 初始化向导**：首次启动自动引导配置，无需修改代码即可设置 GitHub 用户名和管理员密码。
+- **📊 实时监控系统**：基于 WebSocket 的服务器状态监控（CPU、内存、运行时间）。
+- **🔗 GitHub 深度集成**：
+  - 自动同步个人资料与仓库列表。
+  - **真实活动统计**：直观展示最近的 GitHub 贡献动态（支持 API 限流自动降级）。
+- **📝 Markdown 博客**：内置 SimpleMDE 编辑器，支持图片上传、标签管理。
+- **🎮 干员档案**：精美的角色展示页面，还原游戏内档案查看体验。
+
+---
+
+## 🚀 快速开始
+
+### Windows 用户 (推荐)
+
+双击运行根目录下的 **`start.bat`** 即可。
+脚本会自动：
+1. 检查并安装所有依赖。
+2. 启动后端 (Port 3001) 和前端 (Port 5173)。
+3. 自动打开浏览器。
+
+### Linux / VPS 用户
+
+使用我们要一键部署脚本：
+
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+### 手动安装
+
+1. **克隆项目**
+   ```bash
+   git clone https://github.com/yourusername/arknights-blog.git
+   cd arknights-blog
+   ```
+
+2. **安装依赖**
+   ```bash
+   # 后端
+   cd backend
+   npm install
+
+   # 前端
+   cd ../frontend
+   npm install
+   ```
+
+3. **启动开发服务器**
+   ```bash
+   # 终端 1 (后端)
+   cd backend
+   npm run dev
+
+   # 终端 2 (前端)
+   cd frontend
+   npm run dev
+   ```
+
+---
+
+## ⚙️ 配置指南
+
+### 系统初始化
+首次访问时，系统会进入**初始化向导**：
+1. **GitHub 用户名**：输入你的 GitHub ID，系统将自动拉取你的头像和公开仓库。
+2. **GitHub Token (可选)**：
+   - 推荐配置以提高 API 限流阈值（从 60次/小时 提升至 5000次/小时）。
+   - 申请地址：[GitHub Settings > Tokens](https://github.com/settings/tokens) (只需 `public_repo` 权限)。
+3. **管理员密码**：设置用于登录博客后台的密钥。
+
+### 环境变量 (.env)
+系统会自动生成 `.env` 文件。如果需要手动配置：
+
+```env
+PORT=3001
+# 管理员密码 (初始化时自动设置)
+ADMIN_PASSWORD=your_secure_password
+# GitHub Token (可选，用于提高API限流)
+GITHUB_TOKEN=ghp_xxxxxx
+```
+
+---
 
 ## 🛠️ 技术栈
 
-### 前端
-- React 19 + Vite
-- React Router (路由)
-- Axios (API调用)
-- Socket.io-client (实时通信)
-- Recharts (数据可视化)
-- SimpleMDE (Markdown编辑)
-- Octokit (GitHub API)
-
-### 后端
-- Node.js + Express
-- Socket.io (WebSocket)
-- systeminformation (系统监控)
-- MongoDB (可选，用于博客存储)
-
-## 📦 安装步骤
-
-### 1. 克隆项目
-```bash
-git clone <your-repo-url>
-cd boke
-```
-
-### 2. 安装前端依赖
-```bash
-cd frontend
-npm install
-```
-
-### 3. 安装后端依赖
-```bash
-cd ../backend
-npm install
-```
-
-### 4. 配置环境变量
-```bash
-cp .env.example .env
-# 编辑 .env 文件，添加你的配置
-```
-
-## 🚀 运行项目
-
-### ⚡ 一键启动（推荐）
-
-**最简单的方式**：双击运行 `start.bat`
-
-这个脚本会自动：
-1. 检查并安装依赖（如果需要）
-2. 启动后端服务器（新窗口）
-3. 启动前端服务器（新窗口）
-4. 自动打开浏览器访问 `http://localhost:5173`
-
-**停止服务**：双击运行 `stop.bat`
+| 模块 | 技术选型 | 说明 |
+|------|----------|------|
+| **前端** | React 19, Vite | 现代化构建与组件化开发 |
+| **样式** | CSS Modules, Arknights Theme | 纯 CSS 实现复杂 UI 效果 |
+| **后端** | Node.js, Express | 轻量级 RESTful API |
+| **通信** | Socket.io, Axios | 实时监控与数据请求 |
+| **数据** | JSON / MongoDB | 灵活的数据存储方案 |
 
 ---
 
-### 开发模式（手动启动）
+## 📂 项目结构
 
-**终端1 - 启动后端服务器：**
-```bash
-cd backend
-npm run dev
 ```
-后端将运行在 `http://localhost:3001`
-
-**终端2 - 启动前端开发服务器：**
-```bash
-cd frontend
-npm run dev
+arknights-blog/
+├── backend/                 # 后端服务
+│   ├── src/
+│   │   ├── routes/          # API 路由 (GitHub, Setup, Monitor...)
+│   │   └── server.js        # 入口文件
+│   └── data/                # 本地数据存储
+├── frontend/                # 前端应用
+│   ├── src/
+│   │   ├── components/      # 复用组件 (Navbar, Cards...)
+│   │   ├── pages/           # 页面 (Home, Blog, Setup...)
+│   │   └── styles/          # 全局样式与主题变量
+├── start.bat                # Windows 启动脚本
+└── deploy.sh                # Linux 部署脚本
 ```
-前端将运行在 `http://localhost:5173`
 
-## 🎯 功能说明
-
-### 主页 (/)
-- 打字动画效果
-- GitHub用户信息和仓库展示
-- 技能/技术栈展示
-
-### 服务器监控 (/monitor)
-- 实时CPU使用率图表
-- 实时内存使用率图表
-- WebSocket连接状态指示
-
-### 角色展示 (/operators)
-- 角色立绘展示（来自PRTS Wiki）
-- 完整属性面板
-- 天赋和技能详情
-- 角色背景故事
-
-### 博客系统 (/blog, /editor)
-- 博客文章列表
-- Markdown编辑器
-- 文章详情页
-
-## 📝 自定义配置
-
-### 更改GitHub用户名
-编辑 `frontend/src/pages/Home.jsx`，将 `bwwq` 替换为你的GitHub用户名。
-
-### 添加更多角色
-编辑 `backend/src/routes/operators.js`，添加更多角色数据。
-
-### 修改颜色主题
-编辑 `frontend/src/styles/arknights-theme.css` 中的CSS变量。
-
-## 🎨 明日方舟设计元素
-
-项目中使用的主要设计元素：
-- **配色**：`#FF6B00` (明日方舟橙)、`#0A0A0A` (深色背景)
-- **字体**：Rajdhani (标题)、Share Tech Mono (正文)
-- **切角效果**：使用 `clip-path` 实现标志性切角
-- **动画**：扫描线、故障效果、边框脉冲
-
-## 📸 截图
-
-*(建议运行项目后添加截图)*
+---
 
 ## 🤝 贡献
 
-欢迎提交Issue和Pull Request!
+欢迎提交 Issue 或 Pull Request！无论是修复 Bug、添加新功能还是改进 UI，都非常欢迎。
 
 ## 📄 许可证
 
-MIT License
-
-## 🙏 致谢
-
-- 明日方舟游戏UI设计灵感
-- PRTS Wiki提供角色数据
-- GitHub API
+本项目采用 [MIT License](LICENSE) 开源。
 
 ---
 
-**Created with ❤️ and ☕ | Inspired by Arknights**
+<div align="center">
+  <p>Created with ❤️ by <a href="https://github.com/bwwq">bwwq</a></p>
+  <p><i>Inspired by Arknights (HyperGryph)</i></p>
+</div>
