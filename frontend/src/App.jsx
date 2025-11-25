@@ -15,6 +15,7 @@ const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const BlogEditor = lazy(() => import('./pages/BlogEditor'));
 const Setup = lazy(() => import('./pages/Setup'));
+const Debug = lazy(() => import('./pages/Debug'));
 
 const LoadingFallback = () => (
   <div style={{
@@ -88,6 +89,7 @@ const App = () => {
                   <Route path="/blog/new" element={<BlogEditor />} />
                   <Route path="/blog/:id" element={<BlogPost />} />
                   <Route path="/blog/:id/edit" element={<BlogEditor />} />
+                  <Route path="/debug" element={<Debug />} />
                 </Routes>
               </Suspense>
             </div>
