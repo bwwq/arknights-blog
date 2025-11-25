@@ -1,29 +1,50 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const router = express.Router();
-const rootEnvPath = path.resolve(process.cwd(), '../.env');
-const configPath = path.resolve(process.cwd(), '../config.json');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Calculate paths relative to this file (backend/src/routes/setup.js)
+// We want to reach d:/boke/.env and d:/boke/config.json
+const rootEnvPath = path.resolve(__dirname, '../../../.env');
+const configPath = path.resolve(__dirname, '../../../config.json');
+
+console.log('Setup paths:', { rootEnvPath, configPath });
 
 // Helper to update .env file
 const updateEnvFile = (key, value) => {
     let envContent = '';
 
-    if (fs.existsSync(rootEnvPath)) {
-        envContent = fs.readFileSync(rootEnvPath, 'utf8');
+    try {
+        if (fs.existsSync(rootEnvPath)) {
+            envContent = fs.readFileSync(rootEnvPath, 'utf8');
+        }
+
+        // Ensure content ends with newline if not empty
+        if (envContent && !envContent.endsWith('\n')) {
+            envContent += '\n';
+        }
+
+        const regex = new RegExp(`^${key}=.*`, 'm');
+        const newLine = `${key}=${value}`;
+
+        if (regex.test(envContent)) {
+            envContent = envContent.replace(regex, newLine);
+        } else {
+            envContent += `${newLine}\n`;
+        }
+
+        fs.writeFileSync(rootEnvPath, envContent);
+        console.log(`Updated .env: ${key}=***`);
+    } catch (err) {
+        console.error(`Failed to update .env for ${key}:`, err);
+        throw err; // Re-throw to be caught by main handler
     }
-
-    const regex = new RegExp(`^${key}=.*`, 'm');
-    const newLine = `${key}=${value}`;
-
-    if (regex.test(envContent)) {
-        envContent = envContent.replace(regex, newLine);
-    } else {
-        envContent += `\n${newLine}`;
-    }
-
-    fs.writeFileSync(rootEnvPath, envContent);
 };
 
 // Helper to update config.json

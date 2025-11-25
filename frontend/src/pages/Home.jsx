@@ -293,7 +293,7 @@ const Home = () => {
                 <div className="contrib-grid">
                     {weeklyActivity.map((day, index) => (
                         <div className="contrib-item" key={index}>
-                            <div className="contrib-bar" style={{ height: `${day.value}%` }}></div>
+                            <div className="contrib-bar" style={{ height: `${day.value}px` }}></div>
                             <span className="contrib-label">{day.day}</span>
                         </div>
                     ))}
