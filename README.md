@@ -39,14 +39,15 @@
 2. 启动后端 (Port 3001) 和前端 (Port 5173)。
 3. 自动打开浏览器。
 
-### Linux / VPS 用户
+### Linux / VPS 用户 (一键部署)
 
-使用我们要一键部署脚本：
+复制以下命令并在终端运行（需要 root 权限）：
 
 ```bash
-chmod +x deploy.sh
-./deploy.sh
+bash <(curl -sL https://raw.githubusercontent.com/bwwq/arknights-blog/master/deploy.sh)
 ```
+
+脚本将自动完成：环境安装(Node.js/Git/PM2)、代码拉取、依赖构建、服务启动及 Nginx 配置。
 
 ### 手动安装
 
