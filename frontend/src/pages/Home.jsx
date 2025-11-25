@@ -45,17 +45,28 @@ const Home = () => {
 
                 // Fetch user events for activity stats through backend proxy
                 if (res.data.login) {
+                    console.log('Fetching events for user:', res.data.login);
                     return axios.get(`${config.API_URL}/api/github/events/${res.data.login}`)
+                        .then(eventsRes => {
+                            console.log('✅ Events fetched successfully:', eventsRes.data.length, 'events');
+                            return eventsRes;
+                        })
                         .catch(err => {
-                            console.warn('Failed to fetch events from backend, trying direct API:', err);
+                            console.warn('❌ Failed to fetch events from backend:', err.message);
+                            console.log('Trying direct GitHub API...');
                             // Fallback to direct GitHub API
-                            return axios.get(`https://api.github.com/users/${res.data.login}/events/public?per_page=100`);
+                            return axios.get(`https://api.github.com/users/${res.data.login}/events/public?per_page=100`)
+                                .then(directRes => {
+                                    console.log('✅ Events fetched from direct API:', directRes.data.length, 'events');
+                                    return directRes;
+                                });
                         });
                 }
+                return Promise.resolve(null);
             })
             .then(eventsRes => {
-                if (eventsRes && eventsRes.data) {
-                    console.log('GitHub events received:', eventsRes.data.length, 'events');
+                if (eventsRes && eventsRes.data && eventsRes.data.length > 0) {
+                    console.log('📊 Processing', eventsRes.data.length, 'events');
                     // Calculate weekly activity
                     const now = new Date();
                     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -70,26 +81,38 @@ const Home = () => {
                         }
                     });
 
-                    console.log('Day activity:', dayActivity);
+                    console.log('📈 Day activity (Mon-Sun):', dayActivity);
 
-                    // Normalize to percentage (max 100%)
+                    // Normalize to percentage (max 100%), minimum 10% if there's any activity
                     const maxActivity = Math.max(...dayActivity, 1);
                     const normalizedActivity = [
-                        { day: '周一', value: Math.round((dayActivity[0] / maxActivity) * 100) },
-                        { day: '周二', value: Math.round((dayActivity[1] / maxActivity) * 100) },
-                        { day: '周三', value: Math.round((dayActivity[2] / maxActivity) * 100) },
-                        { day: '周四', value: Math.round((dayActivity[3] / maxActivity) * 100) },
-                        { day: '周五', value: Math.round((dayActivity[4] / maxActivity) * 100) },
-                        { day: '周六', value: Math.round((dayActivity[5] / maxActivity) * 100) },
-                        { day: '周日', value: Math.round((dayActivity[6] / maxActivity) * 100) }
+                        { day: '周一', value: dayActivity[0] > 0 ? Math.max(10, Math.round((dayActivity[0] / maxActivity) * 100)) : 0 },
+                        { day: '周二', value: dayActivity[1] > 0 ? Math.max(10, Math.round((dayActivity[1] / maxActivity) * 100)) : 0 },
+                        { day: '周三', value: dayActivity[2] > 0 ? Math.max(10, Math.round((dayActivity[2] / maxActivity) * 100)) : 0 },
+                        { day: '周四', value: dayActivity[3] > 0 ? Math.max(10, Math.round((dayActivity[3] / maxActivity) * 100)) : 0 },
+                        { day: '周五', value: dayActivity[4] > 0 ? Math.max(10, Math.round((dayActivity[4] / maxActivity) * 100)) : 0 },
+                        { day: '周六', value: dayActivity[5] > 0 ? Math.max(10, Math.round((dayActivity[5] / maxActivity) * 100)) : 0 },
+                        { day: '周日', value: dayActivity[6] > 0 ? Math.max(10, Math.round((dayActivity[6] / maxActivity) * 100)) : 0 }
                     ];
 
-                    console.log('Normalized activity:', normalizedActivity);
+                    console.log('✅ Normalized activity:', normalizedActivity);
                     setWeeklyActivity(normalizedActivity);
+                } else {
+                    console.log('ℹ️ No recent events found, using demo data');
+                    // Set some demo activity if no real data
+                    setWeeklyActivity([
+                        { day: '周一', value: 40 },
+                        { day: '周二', value: 70 },
+                        { day: '周三', value: 55 },
+                        { day: '周四', value: 85 },
+                        { day: '周五', value: 60 },
+                        { day: '周六', value: 30 },
+                        { day: '周日', value: 20 }
+                    ]);
                 }
             })
             .catch(err => {
-                console.error('GitHub API Error:', err);
+                console.error('❌ GitHub API Error:', err);
                 // Set default fallback data
                 setGithubData({
                     login: '博士',
