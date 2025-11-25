@@ -46,6 +46,20 @@ const App = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (githubUsername) {
+      // Find existing favicon or create new one
+      let link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+      }
+      link.type = 'image/png';
+      link.href = `https://github.com/${githubUsername}.png`;
+    }
+  }, [githubUsername]);
+
   const handleSetupComplete = (username) => {
     setGithubUsername(username);
     setIsInitialized(true);
