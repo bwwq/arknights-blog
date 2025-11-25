@@ -14,7 +14,11 @@ const __dirname = dirname(__filename);
 const rootEnvPath = path.resolve(__dirname, '../../../.env');
 const configPath = path.resolve(__dirname, '../../../config.json');
 
-console.log('Setup paths:', { rootEnvPath, configPath });
+console.log('=== Setup Route Debug ===');
+console.log('Current directory:', __dirname);
+console.log('Config path resolved to:', configPath);
+console.log('Env path resolved to:', rootEnvPath);
+console.log('=========================');
 
 // Helper to update .env file
 const updateEnvFile = (key, value) => {

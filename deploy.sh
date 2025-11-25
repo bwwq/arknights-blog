@@ -76,6 +76,16 @@ if [ ! -f ".env" ]; then
     echo -e "${YELLOW}.env 文件已创建，请通过网页端初始化向导设置密码${NC}"
 fi
 
+# 确保 config.json 存在且可写
+if [ ! -f "config.json" ]; then
+    echo '{"isInitialized": false}' > config.json
+    chmod 666 config.json
+    echo -e "${GREEN}已创建 config.json${NC}"
+else
+    # 确保已有文件也是可写的
+    chmod 666 config.json
+fi
+
 # 后端 .env
 if [ ! -f "backend/.env" ]; then
     echo "PORT=3001" > backend/.env
