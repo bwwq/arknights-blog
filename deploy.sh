@@ -73,10 +73,7 @@ echo -e "\n${GREEN}[6/8] 配置环境变量...${NC}"
 # 根目录 .env
 if [ ! -f ".env" ]; then
     cp .env.example .env
-    echo -e "${YELLOW}请编辑 .env 文件设置管理员密码${NC}"
-    read -p "请输入管理员密码 (默认: admin123): " ADMIN_PASSWORD
-    ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
-    sed -i "s/your_admin_password_here/$ADMIN_PASSWORD/" .env
+    echo -e "${YELLOW}.env 文件已创建，请通过网页端初始化向导设置密码${NC}"
 fi
 
 # 后端 .env
@@ -95,7 +92,7 @@ npm install --production
 # 安装前端依赖并构建
 echo "安装前端依赖并构建..."
 cd "$DEPLOY_DIR/frontend"
-npm install
+npm install --legacy-peer-deps
 npm run build
 
 # 8. 配置 PM2 并启动服务
