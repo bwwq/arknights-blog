@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhodes Island // Neural Network</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-main: #e0e0e0;
+            --text-dim: #666;
+            --accent-blue: #23ade5;
+            --border-color: #333;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: 'Courier New', monospace;
+            color: var(--text-main);
+        }
+
+        #dashboard {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: 60px 1fr;
+            z-index: 1;
+            background: #111;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+            background: rgba(20, 20, 20, 0.9);
+        }
+
+        .sidebar {
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            background: rgba(15, 15, 15, 0.8);
+        }
+
+        .main-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-blue);
+            opacity: 0.5;
+        }
+
+        h2 {
+            font-size: 14px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 4px;
+        }
+
+        .data-val {
+            color: #fff;
+        }
+
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+            display: grid;
+        }
+
+        .grid-tile {
+            background-color: #000;
+            border: 1px solid #080808;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .grid-tile.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 20;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        #ui-layer {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 30;
+            text-align: right;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-size: 64px;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: -4px;
+            margin: 0;
+        }
+
+        .loading-label {
+            font-size: 12px;
+            color: var(--accent-blue);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+    </style>
+    <script
+        type="importmap">{"imports": {"three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+</head>
+
+<body>
+    <div id="dashboard">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 20px; height: 20px; background: var(--accent-blue);"></div><span>RHODES ISLAND //
+                    NEURAL NETWORK</span>
+            </div>
+            <div style="font-size: 12px; color: var(--accent-blue);">CONNECTED</div>
+        </div>
+        <div class="sidebar">
+            <div style="margin-bottom: 20px; color: #fff;">> DASHBOARD</div>
+            <div style="margin-bottom: 20px;">> OPERATORS</div>
+            <div style="margin-bottom: 20px;">> INFRASTRUCTURE</div>
+            <div style="margin-bottom: 20px;">> RECRUITMENT</div>
+            <div style="margin-top: 50px; border-top: 1px solid #333; padding-top: 20px;">
+                <div style="font-size: 10px; color: #666;">SERVER STATUS</div>
+                <div style="color: #4caf50; font-size: 12px;">ONLINE</div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="card">
+                <h2>System Resources</h2>
+                <div class="data-row"><span>CPU LOAD</span><span class="data-val">45%</span></div>
+                <div class="data-row"><span>MEMORY</span><span class="data-val">12.4GB</span></div>
+                <div class="data-row"><span>NETWORK</span><span class="data-val">1.2TB</span></div>
+                <div
+                    style="height: 100px; background: #222; margin-top: 10px; display: flex; align-items: flex-end; gap: 2px;">
+                    <div style="width: 20%; height: 40%; background: #333;"></div>
+                    <div style="width: 20%; height: 70%; background: #333;"></div>
+                    <div style="width: 20%; height: 50%; background: #333;"></div>
+                    <div style="width: 20%; height: 80%; background: var(--accent-blue);"></div>
+                    <div style="width: 20%; height: 60%; background: #333;"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Recent Logs</h2>
+                <p>> [SYSTEM] Connection established.</p>
+                <p>> [AUTH] User verified.</p>
+                <p>> [DATA] Syncing local cache...</p>
+                <p>> [WARN] High latency detected in Sector 4.</p>
+                <p>> [SYSTEM] Optimization complete.</p>
+            </div>
+            <div class="card">
+                <h2>Active Missions</h2>
+                <div class="data-row"><span>OPERATION</span><span class="data-val">CC-12</span></div>
+                <div class="data-row"><span>SQUAD</span><span class="data-val">ALPHA</span></div>
+                <div class="data-row"><span>STATUS</span><span class="data-val" style="color: var(--accent-blue);">IN
+                        PROGRESS</span></div>
+            </div>
+        </div>
+    </div>
+    <canvas id="network-canvas"></canvas>
+    <div id="loader-overlay"></div>
+    <div id="canvas-container"></div>
+    <div id="ui-layer">
+        <div class="loading-label">System Loading</div>
+        <div class="loading-text" id="percent">00%</div>
+    </div>
+    <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+        const networkCanvas = document.getElementById('network-canvas');
+        const netCtx = networkCanvas.getContext('2d');
+        networkCanvas.width = window.innerWidth;
+        networkCanvas.height = window.innerHeight;
+
+        class NetworkNode {
+            constructor(index, total) {
+                const angle = (index / total) * Math.PI * 2;
+                const radiusVariation = 0.3 + Math.random() * 0.2;
+                const radius = Math.min(window.innerWidth, window.innerHeight) * radiusVariation;
+                this.targetX = window.innerWidth / 2 + Math.cos(angle) * radius;
+                this.targetY = window.innerHeight / 2 + Math.sin(angle) * radius;
+                this.x = window.innerWidth / 2;
+                this.y = window.innerHeight / 2;
+                this.progress = 0;
+                this.active = false;
+                this.pulsePhase = Math.random() * Math.PI * 2;
+            }
+            update(speed) {
+                if (this.active && this.progress < 1) {
+                    this.progress += speed;
+                    if (this.progress > 1) this.progress = 1;
+                    this.x = this.x + (this.targetX - this.x) * this.progress;
+                    this.y = this.y + (this.targetY - this.y) * this.progress;
+                }
+                this.pulsePhase += 0.03;
+            }
+        }
+
+        class DataPacket {
+            constructor(x1, y1, x2, y2) {
+                this.x1 = x1; this.y1 = y1;
+                this.x2 = x2; this.y2 = y2;
+                this.progress = 0;
+                this.speed = 0.01 + Math.random() * 0.02;
+            }
+            update() {
+                this.progress += this.speed;
+                if (this.progress > 1) this.progress = 0;
+            }
+            draw(ctx) {
+                const x = this.x1 + (this.x2 - this.x1) * this.progress;
+                const y = this.y1 + (this.y2 - this.y1) * this.progress;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = 'rgba(35, 173, 229, 1)';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        const nodeCount = 20;
+        const nodes = Array.from({ length: nodeCount }, (_, i) => new NetworkNode(i, nodeCount));
+        const dataPackets = [];
+        let activeNodeIndex = 0;
+        let networkProgress = 0;
+        let scanLineY = 0;
+        let connectionCount = 0;
+
+        function drawNetwork() {
+            netCtx.clearRect(0, 0, networkCanvas.width, networkCanvas.height);
+
+            // Draw scanning line
+            scanLineY = (scanLineY + 2) % networkCanvas.height;
+            const gradient = netCtx.createLinearGradient(0, scanLineY - 50, 0, scanLineY + 50);
+            gradient.addColorStop(0, 'rgba(35, 173, 229, 0)');
+            gradient.addColorStop(0.5, 'rgba(35, 173, 229, 0.15)');
+            gradient.addColorStop(1, 'rgba(35, 173, 229, 0)');
+            netCtx.fillStyle = gradient;
+            netCtx.fillRect(0, scanLineY - 50, networkCanvas.width, 100);
+
+            connectionCount = 0;
+            for (let i = 0; i < nodes.length; i++) {
+                if (!nodes[i].active) continue;
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (!nodes[j].active) continue;
+                    const dist = Math.sqrt((nodes[i].x - nodes[j].x) ** 2 + (nodes[i].y - nodes[j].y) ** 2);
+                    if (dist > 300) continue;
+
+                    connectionCount++;
+                    const opacity = Math.min(nodes[i].progress, nodes[j].progress) * (1 - dist / 600) * 0.6;
+                    const lineGradient = netCtx.createLinearGradient(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+                    lineGradient.addColorStop(0, `rgba(35, 173, 229, ${opacity})`);
+                    lineGradient.addColorStop(0.5, `rgba(35, 173, 229, ${opacity * 1.5})`);
+                    lineGradient.addColorStop(1, `rgba(35, 173, 229, ${opacity})`);
+                    netCtx.strokeStyle = lineGradient;
+                    netCtx.lineWidth = 1.5;
+                    netCtx.shadowBlur = 6;
+                    netCtx.shadowColor = 'rgba(35, 173, 229, 0.5)';
+                    netCtx.beginPath();
+                    netCtx.moveTo(nodes[i].x, nodes[i].y);
+                    netCtx.lineTo(nodes[j].x, nodes[j].y);
+                    netCtx.stroke();
+                    netCtx.shadowBlur = 0;
+
+                    if (Math.random() < 0.005 && dataPackets.length < 30) {
+                        dataPackets.push(new DataPacket(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y));
+                    }
+                }
+            }
+
+            dataPackets.forEach((packet, index) => {
+                packet.update();
+                packet.draw(netCtx);
+                if (packet.progress >= 1 && Math.random() < 0.1) {
+                    dataPackets.splice(index, 1);
+                }
+            });
+
+            nodes.forEach(node => {
+                if (!node.active) return;
+                const pulse = Math.sin(node.pulsePhase) * 0.3 + 0.7;
+                const size = (4 + node.progress * 3) * pulse;
+
+                netCtx.shadowBlur = 25 * pulse;
+                netCtx.shadowColor = 'rgba(35, 173, 229, 0.8)';
+                netCtx.fillStyle = `rgba(35, 173, 229, ${node.progress * 0.8})`;
+                netCtx.beginPath();
+                netCtx.arc(node.x, node.y, size + 5, 0, Math.PI * 2);
+                netCtx.fill();
+
+                netCtx.fillStyle = `rgba(255, 255, 255, ${node.progress})`;
+                netCtx.beginPath();
+                netCtx.arc(node.x, node.y, size, 0, Math.PI * 2);
+                netCtx.fill();
+
+                netCtx.strokeStyle = `rgba(35, 173, 229, ${node.progress * 0.6})`;
+                netCtx.lineWidth = 2;
+                netCtx.beginPath();
+                netCtx.arc(node.x, node.y, size + 6, 0, Math.PI * 2);
+                netCtx.stroke();
+                netCtx.shadowBlur = 0;
+            });
+
+            drawCornerDecorations();
+
+            netCtx.font = '12px "Courier New"';
+            netCtx.fillStyle = 'rgba(35, 173, 229, 0.8)';
+            netCtx.fillText(`CONNECTIONS: ${connectionCount}`, 20, networkCanvas.height - 20);
+            netCtx.fillText(`NODES: ${activeNodeIndex}/${nodeCount}`, 20, networkCanvas.height - 40);
+        }
+
+        function drawCornerDecorations() {
+            const cornerSize = 30;
+            const offset = 20;
+            netCtx.strokeStyle = 'rgba(35, 173, 229, 0.5)';
+            netCtx.lineWidth = 2;
+
+            netCtx.beginPath(); netCtx.moveTo(offset + cornerSize, offset); netCtx.lineTo(offset, offset); netCtx.lineTo(offset, offset + cornerSize); netCtx.stroke();
+            netCtx.beginPath(); netCtx.moveTo(networkCanvas.width - offset - cornerSize, offset); netCtx.lineTo(networkCanvas.width - offset, offset); netCtx.lineTo(networkCanvas.width - offset, offset + cornerSize); netCtx.stroke();
+            netCtx.beginPath(); netCtx.moveTo(offset, networkCanvas.height - offset - cornerSize); netCtx.lineTo(offset, networkCanvas.height - offset); netCtx.lineTo(offset + cornerSize, networkCanvas.height - offset); netCtx.stroke();
+            netCtx.beginPath(); netCtx.moveTo(networkCanvas.width - offset - cornerSize, networkCanvas.height - offset); netCtx.lineTo(networkCanvas.width - offset, networkCanvas.height - offset); netCtx.lineTo(networkCanvas.width - offset, networkCanvas.height - offset - cornerSize); netCtx.stroke();
+        }
+
+        function animateNetwork() {
+            if (activeNodeIndex < nodes.length && networkProgress > activeNodeIndex * 5) {
+                nodes[activeNodeIndex].active = true;
+                activeNodeIndex++;
+            }
+            nodes.forEach(node => node.update(0.05));
+            drawNetwork();
+            requestAnimationFrame(animateNetwork);
+        }
+        animateNetwork();
+
+        const overlay = document.getElementById('loader-overlay');
+        const cols = 12, rows = 9, totalTiles = cols * rows;
+        const tiles = [], tilePositions = [];
+        overlay.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        overlay.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+        const tileWidth = window.innerWidth / cols, tileHeight = window.innerHeight / rows;
+
+        for (let i = 0; i < totalTiles; i++) {
+            const tile = document.createElement('div');
+            tile.className = 'grid-tile';
+            overlay.appendChild(tile);
+            tiles.push(tile);
+            const col = i % cols, row = Math.floor(i / cols);
+            tilePositions.push({ x: col * tileWidth + tileWidth / 2, y: row * tileHeight + tileHeight / 2 });
+        }
+
+        function updateTileReveal() {
+            tiles.forEach((tile, index) => {
+                const pos = tilePositions[index];
+                let minDistance = Infinity;
+                nodes.forEach((node, i) => {
+                    if (!node.active) return;
+                    const dx = pos.x - node.x, dy = pos.y - node.y;
+                    minDistance = Math.min(minDistance, Math.sqrt(dx * dx + dy * dy));
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        if (!nodes[j].active || Math.min(node.progress, nodes[j].progress) < 0.5) continue;
+                        const dist = Math.sqrt((node.x - nodes[j].x) ** 2 + (node.y - nodes[j].y) ** 2);
+                        if (dist > 300) continue;
+                        const A = pos.x - node.x, B = pos.y - node.y, C = nodes[j].x - node.x, D = nodes[j].y - node.y;
+                        const dot = A * C + B * D, lenSq = C * C + D * D;
+                        let param = lenSq != 0 ? dot / lenSq : -1;
+                        let xx = param < 0 ? node.x : param > 1 ? nodes[j].x : node.x + param * C;
+                        let yy = param < 0 ? node.y : param > 1 ? nodes[j].y : node.y + param * D;
+                        minDistance = Math.min(minDistance, Math.sqrt((pos.x - xx) ** 2 + (pos.y - yy) ** 2));
+                    }
+                });
+                if (minDistance < 150 && !tile.classList.contains('hidden')) tile.classList.add('hidden');
+            });
+        }
+        setInterval(updateTileReveal, 50);
+
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 4;
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
+
+        const group = new THREE.Group();
+        scene.add(group);
+        const outerMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1.8, 0), new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.15 }));
+        group.add(outerMesh);
+        const innerMesh = new THREE.Mesh(new THREE.DodecahedronGeometry(1.2, 0), new THREE.MeshBasicMaterial({ color: 0x23ade5, wireframe: true, transparent: true, opacity: 0.4 }));
+        group.add(innerMesh);
+        const coreMesh = new THREE.Mesh(new THREE.OctahedronGeometry(0.6, 0), new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false }));
+        coreMesh.add(new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.OctahedronGeometry(0.6, 0)), new THREE.LineBasicMaterial({ color: 0x23ade5, transparent: true, opacity: 0.8 })));
+        group.add(coreMesh);
+
+        const composer = new EffectComposer(renderer);
+        composer.addPass(new RenderPass(scene, camera));
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+        bloomPass.threshold = 0; bloomPass.strength = 1.2; bloomPass.radius = 0.5;
+        composer.addPass(bloomPass);
+
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+            outerMesh.rotation.y += 0.002; outerMesh.rotation.x -= 0.001;
+            innerMesh.rotation.y -= 0.005; innerMesh.rotation.z += 0.002;
+            coreMesh.rotation.x += 0.01; coreMesh.rotation.y += 0.01;
+            group.position.y = Math.sin(time * 0.5) * 0.1;
+            composer.render();
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+            networkCanvas.width = window.innerWidth;
+            networkCanvas.height = window.innerHeight;
+        });
+
+        const percentEl = document.getElementById('percent');
+        const uiLayer = document.getElementById('ui-layer');
+        let progress = 0, isComplete = false;
+
+        function completeLoading() {
+            if (isComplete) return;
+            isComplete = true;
+            progress = 100;
+            percentEl.innerText = '100%';
+            tiles.forEach(t => t.classList.add('hidden'));
+            const tl = setInterval(() => {
+                group.scale.multiplyScalar(1.1);
+                group.position.z -= 0.5;
+                uiLayer.style.opacity = 0;
+                uiLayer.style.transition = 'opacity 0.5s';
+                if (group.position.z < -10) {
+                    clearInterval(tl);
+                    container.style.display = 'none';
+                    overlay.style.display = 'none';
+                    networkCanvas.style.display = 'none';
+                }
+            }, 16);
+        }
+
+        function updateProgress() {
+            if (progress < 100 && !isComplete) {
+                let inc = Math.random() * 2 + 1;
+                if (progress > 80) inc = 0.8;
+                progress += inc;
+                if (progress > 100) progress = 100;
+                networkProgress = progress;
+                percentEl.innerText = Math.floor(progress).toString().padStart(2, '0') + '%';
+                if (progress >= 100) completeLoading();
+                else setTimeout(updateProgress, Math.random() * 40 + 20);
+            }
+        }
+
+        document.body.addEventListener('click', () => { if (!isComplete) completeLoading(); });
+        setTimeout(updateProgress, 300);
+    </script>
+</body>
+
+</html>

@@ -4,6 +4,8 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import si from 'systeminformation';
 import dotenv from 'dotenv';
+import os from 'os';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
@@ -21,8 +23,6 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Rate Limiting
-import rateLimit from 'express-rate-limit';
-
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Limit each IP to 100 requests per windowMs
@@ -61,13 +61,45 @@ app.use('/api/upload', uploadRouter);
 app.use('/api/setup', setupRouter);
 
 // WebSocket for real-time server monitoring
-let monitoringInterval;
-
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('客户端已连接监控');
 
+    // Send static system info once
+    const sendSystemInfo = async () => {
+        try {
+            const osInfo = await si.osInfo();
+            let distro = osInfo.distro;
+
+            // Fix for Windows encoding issues (garbled localized names)
+            if (osInfo.platform === 'win32' || osInfo.platform === 'Windows') {
+                const release = os.release();
+                const build = parseInt(release.split('.')[2]);
+                if (build >= 22000) {
+                    distro = 'Windows 11';
+                } else {
+                    distro = 'Windows 10';
+                }
+            }
+
+            socket.emit('systemInfo', {
+                platform: osInfo.platform,
+                distro: distro,
+                release: osInfo.release,
+                arch: osInfo.arch
+            });
+        } catch (error) {
+            console.error('获取静态系统信息失败:', error);
+        }
+    };
+
+    // Send immediately on connection
+    sendSystemInfo();
+
+    // Allow client to request it manually (e.g. on page load)
+    socket.on('requestSystemInfo', sendSystemInfo);
+
     // Send server stats every second
-    monitoringInterval = setInterval(async () => {
+    const interval = setInterval(async () => {
         try {
             const cpu = await si.currentLoad();
             const mem = await si.mem();
@@ -88,9 +120,7 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('客户端已断开连接');
-        if (monitoringInterval) {
-            clearInterval(monitoringInterval);
-        }
+        clearInterval(interval);
     });
 });
 

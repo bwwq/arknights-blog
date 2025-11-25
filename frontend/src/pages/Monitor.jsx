@@ -10,6 +10,7 @@ const socket = io(config.API_URL);
 const Monitor = () => {
     const [metrics, setMetrics] = useState([]);
     const [current, setCurrent] = useState({ cpu: 0, mem: 0, uptime: 0 });
+    const [systemInfo, setSystemInfo] = useState({ distro: '获取中...' });
 
     useEffect(() => {
         socket.on('metrics', (data) => {
@@ -21,7 +22,17 @@ const Monitor = () => {
             setCurrent(data);
         });
 
-        return () => socket.off('metrics');
+        socket.on('systemInfo', (data) => {
+            setSystemInfo(data);
+        });
+
+        // Request system info explicitly in case we missed the initial event
+        socket.emit('requestSystemInfo');
+
+        return () => {
+            socket.off('metrics');
+            socket.off('systemInfo');
+        };
     }, []);
 
     return (
@@ -92,7 +103,7 @@ const Monitor = () => {
                     <div className="info-grid">
                         <div className="info-item">
                             <span className="label">操作系统</span>
-                            <span className="val">Windows 系统</span>
+                            <span className="val">{systemInfo.distro}</span>
                         </div>
                         <div className="info-item">
                             <span className="label">运行时间</span>

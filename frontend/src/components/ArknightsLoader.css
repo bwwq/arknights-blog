@@ -1,0 +1,90 @@
+/* Arknights Loader Styles */
+.arknights-loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    pointer-events: auto;
+    font-family: 'Courier New', monospace;
+    color: #e0e0e0;
+}
+
+#loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    display: grid;
+    pointer-events: none;
+    /* Allow clicks to pass through if needed, but tiles block them */
+}
+
+.grid-tile {
+    background-color: #000;
+    border: 1px solid #080808;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: auto;
+    /* Tiles capture clicks */
+    width: 100%;
+    height: 100%;
+}
+
+.grid-tile.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+#network-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 15;
+    /* Moved above overlay so lines are visible */
+    pointer-events: none;
+}
+
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 20;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+#canvas-container canvas {
+    display: block;
+}
+
+#ui-layer {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 30;
+    text-align: right;
+    pointer-events: none;
+}
+
+.loading-text {
+    font-size: 64px;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: -4px;
+    margin: 0;
+}
+
+.loading-label {
+    font-size: 12px;
+    color: #23ade5;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
