@@ -1,0 +1,151 @@
+.editor-container {
+    padding: var(--space-lg);
+    max-width: 1000px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.editor-actions {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.editor-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    color: var(--rhodes-cyan);
+    font-size: 12px;
+}
+
+.rhodes-input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--rhodes-gray-dim);
+    padding: 12px;
+    color: var(--rhodes-white);
+    font-family: var(--font-main);
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.rhodes-input:focus {
+    border-color: var(--rhodes-cyan);
+    background: rgba(35, 173, 229, 0.05);
+}
+
+/* Customize SimpleMDE */
+.mde-wrapper {
+    flex: 1;
+    border: 1px solid var(--rhodes-gray-dim);
+}
+
+.EasyMDEContainer {
+    background: var(--rhodes-dark-bg);
+}
+
+.editor-toolbar {
+    background: #222 !important;
+    border-color: #333 !important;
+    color: #fff !important;
+}
+
+.editor-toolbar i {
+    color: #aaa !important;
+}
+
+.editor-toolbar i:hover {
+    color: var(--rhodes-cyan) !important;
+}
+
+.CodeMirror {
+    background: #1a1a1a !important;
+    color: #ddd !important;
+    border-color: #333 !important;
+}
+
+.editor-preview {
+    background: #1a1a1a !important;
+    color: #ddd !important;
+}
+
+.editor-statusbar {
+    display: none !important;
+}
+
+/* Auth Card */
+.auth-card {
+    max-width: 500px;
+    margin: 100px auto;
+    padding: var(--space-xl);
+    text-align: center;
+}
+
+.auth-card h1 {
+    margin-bottom: var(--space-md);
+}
+
+.auth-card .input-group {
+    text-align: left;
+    margin-bottom: var(--space-lg);
+}
+
+.auth-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+}
+
+.auth-actions button {
+    min-width: 120px;
+}
+
+.error-msg {
+    margin-bottom: var(--space-md);
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .editor-container {
+        padding: var(--space-md);
+    }
+
+    .editor-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+    }
+
+    .editor-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .editor-actions button {
+        flex: 1;
+    }
+
+    .auth-card {
+        margin: 40px auto;
+        padding: var(--space-lg);
+    }
+}

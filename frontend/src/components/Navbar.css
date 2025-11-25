@@ -1,0 +1,232 @@
+.rhodes-sidebar {
+    width: var(--sidebar-width);
+    height: 100%;
+    background: var(--rhodes-black);
+    border-right: var(--border-thin);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: width 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition-delay: 0s;
+    /* Immediate collapse */
+    overflow: hidden;
+    position: relative;
+}
+
+.rhodes-sidebar:hover {
+    width: var(--sidebar-width-expanded);
+    transition-delay: 0.5s;
+    /* Delay expansion by 0.5s */
+}
+
+.sidebar-header {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: var(--border-thin);
+    flex-shrink: 0;
+}
+
+.logo-box {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--rhodes-cyan);
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+.sidebar-menu {
+    flex: 1;
+    padding: var(--space-md) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    overflow-x: hidden;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 20px;
+    text-decoration: none;
+    color: var(--rhodes-gray);
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--rhodes-white);
+}
+
+.menu-item.active {
+    color: var(--rhodes-cyan);
+    background: var(--rhodes-cyan-dim);
+    border-left-color: var(--rhodes-cyan);
+}
+
+.menu-item .icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.menu-item .label {
+    font-family: var(--font-display);
+    font-size: 14px;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    transition-delay: 0s;
+    transform: translateX(10px);
+}
+
+.rhodes-sidebar:hover .menu-item .label {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.6s;
+    /* Wait for sidebar to expand */
+}
+
+.sidebar-footer {
+    height: 48px;
+    border-top: var(--border-thin);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--rhodes-gray);
+    flex-shrink: 0;
+}
+
+.status-dot.online {
+    background: var(--rhodes-cyan);
+    box-shadow: 0 0 8px var(--rhodes-cyan);
+}
+
+.version {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--rhodes-gray-dim);
+    opacity: 0;
+    white-space: nowrap;
+}
+
+.rhodes-sidebar:hover .version {
+    opacity: 1;
+}
+
+/* ==================== Mobile Navigation ==================== */
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 200;
+    background: var(--rhodes-panel-bg);
+    border: var(--border-thin);
+    width: 40px;
+    height: 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.mobile-toggle .bar {
+    width: 20px;
+    height: 2px;
+    background-color: var(--rhodes-cyan);
+    transition: all 0.3s;
+}
+
+.mobile-toggle.open .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-toggle.open .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-toggle.open .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 90;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Mobile Media Query */
+@media (max-width: 768px) {
+    .mobile-toggle {
+        display: flex;
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    .rhodes-sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        bottom: 0;
+        width: 240px;
+        /* Always expanded on mobile */
+        transition: left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .rhodes-sidebar.open {
+        left: 0;
+    }
+
+    /* Adjust content to not be hidden by toggle */
+    .sidebar-header {
+        justify-content: flex-end;
+        /* Push logo to right to avoid overlap with toggle */
+        padding-right: 20px;
+    }
+
+    /* Always show labels on mobile */
+    .menu-item .label {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .version {
+        opacity: 1;
+    }
+}

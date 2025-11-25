@@ -1,0 +1,137 @@
+.blog-post-container {
+    padding: var(--space-lg);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--rhodes-gray);
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.back-link:hover {
+    color: var(--rhodes-cyan);
+}
+
+.rhodes-btn.sm {
+    padding: 4px 12px;
+    font-size: 12px;
+    min-width: auto;
+}
+
+.post-header {
+    margin-bottom: var(--space-lg);
+    border-bottom: var(--border-thin);
+    padding-bottom: var(--space-lg);
+}
+
+.post-title {
+    font-size: 32px;
+    margin-bottom: var(--space-md);
+    color: var(--rhodes-white);
+}
+
+.post-meta {
+    display: flex;
+    gap: var(--space-lg);
+    color: var(--rhodes-gray);
+    font-size: 12px;
+}
+
+.id-tag {
+    color: var(--rhodes-orange);
+}
+
+.post-content {
+    line-height: 1.8;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3 {
+    color: var(--rhodes-white);
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-family: var(--font-display);
+}
+
+.post-content h1 {
+    font-size: 24px;
+    border-bottom: 1px solid var(--rhodes-border);
+    padding-bottom: 8px;
+}
+
+.post-content h2 {
+    font-size: 20px;
+    border-left: 3px solid var(--rhodes-cyan);
+    padding-left: 12px;
+}
+
+.post-content p {
+    margin-bottom: 16px;
+}
+
+.post-content ul,
+.post-content ol {
+    margin-bottom: 16px;
+    padding-left: 24px;
+}
+
+.post-content blockquote {
+    border-left: 2px solid var(--rhodes-orange);
+    padding-left: 16px;
+    margin: 16px 0;
+    color: var(--rhodes-gray);
+    font-style: italic;
+    background: rgba(255, 85, 0, 0.05);
+    padding: 12px;
+}
+
+.post-content code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+}
+
+.post-content img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin: 16px 0;
+}
+
+@media (max-width: 768px) {
+    .blog-post-container {
+        padding: var(--space-md);
+    }
+
+    .post-header {
+        margin-bottom: var(--space-md);
+        padding-bottom: var(--space-md);
+    }
+
+    .post-title {
+        font-size: 24px;
+    }
+
+    .post-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .post-content {
+        font-size: 15px;
+    }
+}

@@ -1,0 +1,31 @@
+.ark-panel {
+    position: relative;
+    margin: 16px 0;
+    animation: fadeIn 0.6s ease;
+}
+
+.ark-panel-title {
+    position: relative;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.title-text {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ark-blue);
+    letter-spacing: 1px;
+}
+
+.title-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--ark-blue) 0%, transparent 100%);
+}
+
+.ark-panel-content {
+    position: relative;
+}
