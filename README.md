@@ -102,7 +102,7 @@ npm run dev
 - 实时内存使用率图表
 - WebSocket连接状态指示
 
-### 铃兰角色展示 (/operators)
+### 角色展示 (/operators)
 - 角色立绘展示（来自PRTS Wiki）
 - 完整属性面板
 - 天赋和技能详情
