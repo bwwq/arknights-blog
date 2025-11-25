@@ -139,89 +139,7 @@ pm2 start ecosystem.config.js
 pm2 startup systemd -u root --hp /root
 pm2 save
 
-# 9. 安装并配置 Nginx
-echo -e "\n${GREEN}[额外] 配置 Nginx 反向代理...${NC}"
-read -p "是否安装并配置 Nginx? (y/n): " INSTALL_NGINX
-
-if [ "$INSTALL_NGINX" = "y" ] || [ "$INSTALL_NGINX" = "Y" ]; then
-    # 安装 Nginx
-    if ! command -v nginx &> /dev/null; then
-        apt-get install -y nginx
-    fi
-
-    # 获取域名
-    read -p "请输入您的域名 (留空使用服务器IP): " DOMAIN
-    if [ -z "$DOMAIN" ]; then
-        DOMAIN=$(curl -s ifconfig.me)
-    fi
-
-    # 创建 Nginx 配置
-    cat > "/etc/nginx/sites-available/arknights-blog" << EOF
-server {
-    listen 80;
-    server_name ${DOMAIN};
-
-    # 前端静态文件
-    location / {
-        root ${DEPLOY_DIR}/frontend/dist;
-        try_files \$uri \$uri/ /index.html;
-    }
-
-    # 后端 API 代理
-    location /api {
-        proxy_pass http://localhost:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    }
-
-    # WebSocket 支持
-    location /socket.io {
-        proxy_pass http://localhost:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host \$host;
-        proxy_cache_bypass \$http_upgrade;
-    }
-
-    # 上传的图片
-    location /uploads {
-        alias ${DEPLOY_DIR}/backend/public/uploads;
-    }
-}
-EOF
-
-    # 启用站点
-    ln -sf /etc/nginx/sites-available/arknights-blog /etc/nginx/sites-enabled/
-    rm -f /etc/nginx/sites-enabled/default
-
-    # 测试配置
-    nginx -t
-
-    # 重启 Nginx
-    systemctl restart nginx
-    systemctl enable nginx
-
-    echo -e "${GREEN}Nginx 配置完成！${NC}"
-    echo -e "访问地址: http://${DOMAIN}"
-fi
-
-# 10. 配置防火墙
-echo -e "\n${GREEN}[额外] 配置防火墙...${NC}"
-if command -v ufw &> /dev/null; then
-    ufw allow 80/tcp
-    ufw allow 443/tcp
-    ufw allow 22/tcp
-    echo "y" | ufw enable
-    echo -e "${GREEN}防火墙配置完成${NC}"
-fi
-
-# 完成
+# 9. 完成
 echo -e "\n${GREEN}================================${NC}"
 echo -e "${GREEN}部署完成！${NC}"
 echo -e "${GREEN}================================${NC}"
@@ -230,13 +148,9 @@ echo -e "后端服务: ${GREEN}运行中${NC}"
 echo -e "PM2 状态: ${YELLOW}pm2 status${NC}"
 echo -e "查看日志: ${YELLOW}pm2 logs arknights-blog-backend${NC}"
 echo ""
-
-if [ "$INSTALL_NGINX" = "y" ] || [ "$INSTALL_NGINX" = "Y" ]; then
-    echo -e "访问地址: ${GREEN}http://${DOMAIN}${NC}"
-else
-    echo -e "后端 API: ${GREEN}http://$(curl -s ifconfig.me):3001${NC}"
-    echo -e "${YELLOW}提示: 建议配置 Nginx 反向代理${NC}"
-fi
+echo -e "后端 API: ${GREEN}http://$(curl -s ifconfig.me):3001${NC}"
+echo -e "前端服务: ${GREEN}http://$(curl -s ifconfig.me):5173${NC} (如果是开发模式)"
+echo -e "${YELLOW}提示: 生产环境建议自行配置 Nginx 反向代理${NC}"
 
 echo ""
 echo -e "${YELLOW}常用命令:${NC}"
