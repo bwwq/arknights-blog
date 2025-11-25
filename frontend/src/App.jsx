@@ -57,6 +57,7 @@ const App = () => {
       }
       link.type = 'image/png';
       link.href = `https://github.com/${githubUsername}.png`;
+      console.log('Favicon updated to:', link.href);
     }
   }, [githubUsername]);
 
