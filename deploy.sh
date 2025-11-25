@@ -98,6 +98,12 @@ npm run build
 # 8. 配置 PM2 并启动服务
 echo -e "\n${GREEN}[8/8] 配置并启动服务...${NC}"
 
+# 安装 serve 用于托管前端
+if ! command -v serve &> /dev/null; then
+    echo "安装 serve..."
+    npm install -g serve
+fi
+
 # 创建 PM2 配置文件
 cat > "$DEPLOY_DIR/ecosystem.config.js" << 'EOF'
 module.exports = {
@@ -117,6 +123,22 @@ module.exports = {
       error_file: './logs/backend-error.log',
       out_file: './logs/backend-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss'
+    },
+    {
+      name: 'arknights-blog-frontend',
+      cwd: './frontend',
+      script: 'serve',
+      env: {
+        PM2_SERVE_PATH: './dist',
+        PM2_SERVE_PORT: 5173,
+        PM2_SERVE_SPA: 'true',
+        PM2_SERVE_HOMEPAGE: '/index.html'
+      },
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      error_file: './logs/frontend-error.log',
+      out_file: './logs/frontend-out.log'
     }
   ]
 };
@@ -127,6 +149,7 @@ mkdir -p "$DEPLOY_DIR/logs"
 
 # 停止旧进程
 pm2 delete arknights-blog-backend 2>/dev/null || true
+pm2 delete arknights-blog-frontend 2>/dev/null || true
 
 # 启动服务
 cd "$DEPLOY_DIR"
@@ -141,19 +164,19 @@ echo -e "\n${GREEN}================================${NC}"
 echo -e "${GREEN}部署完成！${NC}"
 echo -e "${GREEN}================================${NC}"
 echo ""
-echo -e "后端服务: ${GREEN}运行中${NC}"
+echo -e "后端服务: ${GREEN}运行中 (Port 3001)${NC}"
+echo -e "前端服务: ${GREEN}运行中 (Port 5173)${NC}"
 echo -e "PM2 状态: ${YELLOW}pm2 status${NC}"
-echo -e "查看日志: ${YELLOW}pm2 logs arknights-blog-backend${NC}"
 echo ""
 echo -e "后端 API: ${GREEN}http://$(curl -s ifconfig.me):3001${NC}"
-echo -e "前端服务: ${GREEN}http://$(curl -s ifconfig.me):5173${NC} (如果是开发模式)"
-echo -e "${YELLOW}提示: 生产环境建议自行配置 Nginx 反向代理${NC}"
+echo -e "前端访问: ${GREEN}http://$(curl -s ifconfig.me):5173${NC}"
+echo -e "${YELLOW}提示: 请在您的反向代理软件中将域名指向 http://localhost:5173${NC}"
 
 echo ""
 echo -e "${YELLOW}常用命令:${NC}"
-echo "  pm2 restart arknights-blog-backend  # 重启服务"
-echo "  pm2 stop arknights-blog-backend     # 停止服务"
-echo "  pm2 logs arknights-blog-backend     # 查看日志"
-echo "  pm2 monit                            # 监控面板"
+echo "  pm2 restart all                     # 重启所有服务"
+echo "  pm2 stop all                        # 停止所有服务"
+echo "  pm2 logs                            # 查看日志"
+echo "  pm2 monit                           # 监控面板"
 echo ""
 echo -e "${GREEN}感谢使用！${NC}"
