@@ -29,7 +29,7 @@ const getGithubUsername = () => {
 
 // GET /api/github/user (default user)
 router.get('/user', async (req, res) => {
-    const username = getGithubUsername();
+    const username = getGithubUsername(); // 每次都重新读取配置
     const cacheKey = `user_${username}`;
 
     try {
@@ -88,6 +88,29 @@ router.get('/repos/:username', async (req, res) => {
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch GitHub repos' });
+    }
+});
+
+// GET /api/github/events/:username
+router.get('/events/:username', async (req, res) => {
+    const { username } = req.params;
+    const cacheKey = `events_${username}`;
+
+    try {
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            return res.json(cached);
+        }
+
+        const { data } = await octokit.activity.listPublicEventsForUser({
+            username,
+            per_page: 100
+        });
+        cache.set(cacheKey, data);
+        res.json(data);
+    } catch (error) {
+        console.error('Failed to fetch GitHub events:', error);
+        res.status(500).json({ error: 'Failed to fetch GitHub events' });
     }
 });
 

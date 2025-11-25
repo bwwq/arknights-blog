@@ -40,16 +40,22 @@ const Home = () => {
         // Fetch GitHub Data
         axios.get(`${config.API_URL}/api/github/user`)
             .then(res => {
-                console.log('GitHub data:', res.data);
+                console.log('GitHub data received:', res.data);
                 setGithubData(res.data);
 
-                // Fetch user events for activity stats
+                // Fetch user events for activity stats through backend proxy
                 if (res.data.login) {
-                    return axios.get(`https://api.github.com/users/${res.data.login}/events/public?per_page=100`);
+                    return axios.get(`${config.API_URL}/api/github/events/${res.data.login}`)
+                        .catch(err => {
+                            console.warn('Failed to fetch events from backend, trying direct API:', err);
+                            // Fallback to direct GitHub API
+                            return axios.get(`https://api.github.com/users/${res.data.login}/events/public?per_page=100`);
+                        });
                 }
             })
             .then(eventsRes => {
                 if (eventsRes && eventsRes.data) {
+                    console.log('GitHub events received:', eventsRes.data.length, 'events');
                     // Calculate weekly activity
                     const now = new Date();
                     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -64,9 +70,11 @@ const Home = () => {
                         }
                     });
 
+                    console.log('Day activity:', dayActivity);
+
                     // Normalize to percentage (max 100%)
                     const maxActivity = Math.max(...dayActivity, 1);
-                    setWeeklyActivity([
+                    const normalizedActivity = [
                         { day: '周一', value: Math.round((dayActivity[0] / maxActivity) * 100) },
                         { day: '周二', value: Math.round((dayActivity[1] / maxActivity) * 100) },
                         { day: '周三', value: Math.round((dayActivity[2] / maxActivity) * 100) },
@@ -74,11 +82,22 @@ const Home = () => {
                         { day: '周五', value: Math.round((dayActivity[4] / maxActivity) * 100) },
                         { day: '周六', value: Math.round((dayActivity[5] / maxActivity) * 100) },
                         { day: '周日', value: Math.round((dayActivity[6] / maxActivity) * 100) }
-                    ]);
+                    ];
+
+                    console.log('Normalized activity:', normalizedActivity);
+                    setWeeklyActivity(normalizedActivity);
                 }
             })
             .catch(err => {
                 console.error('GitHub API Error:', err);
+                // Set default fallback data
+                setGithubData({
+                    login: '博士',
+                    avatar_url: 'https://placehold.co/300x300/1a1a1a/23ADE5?text=博士',
+                    html_url: 'https://github.com',
+                    public_repos: '-',
+                    followers: '-'
+                });
             });
 
         // Fetch Recent Blogs
