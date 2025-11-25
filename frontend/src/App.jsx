@@ -16,9 +16,18 @@ const BlogPost = lazy(() => import('./pages/BlogPost'));
 const BlogEditor = lazy(() => import('./pages/BlogEditor'));
 const Setup = lazy(() => import('./pages/Setup'));
 
-import ArknightsLoader from './components/ArknightsLoader';
-
-const LoadingFallback = () => <ArknightsLoader />;
+const LoadingFallback = () => (
+  <div style={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    color: 'var(--rhodes-cyan)',
+    fontFamily: 'var(--font-mono)'
+  }}>
+    正在加载模块...
+  </div>
+);
 
 const App = () => {
   const [isInitialized, setIsInitialized] = useState(null);
