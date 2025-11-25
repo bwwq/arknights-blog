@@ -1,6 +1,6 @@
-# 明日方舟风格程序员博客 | Arknights-Style Developer Blog
+# 明日方舟风格博客 | Arknights Blog
 
-一个以《明日方舟》游戏UI为灵感的全栈个人博客平台，featuring实时服务器监控、Markdown博客系统、GitHub集成和铃兰角色展示。
+一个以《明日方舟》游戏UI为灵感的全栈个人博客平台，featuring实时服务器监控、Markdown博客系统、GitHub集成和角色展示。
 
 ## ✨ 特色功能
 
@@ -13,7 +13,7 @@
 - 📊 **实时服务器监控**：WebSocket实时推送CPU和内存使用率
 - 📝 **Markdown博客系统**：内置SimpleMDE编辑器
 - 🔗 **GitHub自动集成**：自动获取并展示你的GitHub仓库和统计数据
-- 🎮 **角色展示**：铃兰（Suzuran）完整角色卡片，数据来自PRTS Wiki
+- 🎮 **角色展示**：完整角色卡片，数据可自定义
 
 ## 🛠️ 技术栈
 
