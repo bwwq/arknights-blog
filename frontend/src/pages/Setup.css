@@ -1,0 +1,288 @@
+.setup-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.setup-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        repeating-linear-gradient(0deg,
+            rgba(255, 107, 0, 0.03) 0px,
+            transparent 1px,
+            transparent 2px,
+            rgba(255, 107, 0, 0.03) 3px);
+    pointer-events: none;
+    animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+.setup-card {
+    max-width: 600px;
+    width: 100%;
+    padding: 3rem;
+    position: relative;
+    z-index: 1;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.setup-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.setup-header h1 {
+    margin-bottom: 2rem;
+    color: var(--color-primary);
+}
+
+.setup-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.progress-step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-bg-secondary);
+    border: 2px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    color: var(--color-text-secondary);
+    transition: all 0.3s ease;
+}
+
+.progress-step.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-bg);
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+}
+
+.progress-line {
+    width: 60px;
+    height: 2px;
+    background: var(--color-border);
+}
+
+.setup-form {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.setup-step h2 {
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+}
+
+.setup-step>p {
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
+}
+
+.input-group small {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.rhodes-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    clip-path: polygon(0 0,
+            calc(100% - 8px) 0,
+            100% 8px,
+            100% 100%,
+            0 100%);
+    transition: all 0.3s ease;
+}
+
+.rhodes-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.1);
+}
+
+.error-msg {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 77, 79, 0.1);
+    border-left: 3px solid var(--color-orange);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.setup-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.setup-actions button {
+    flex: 1;
+}
+
+.setup-complete {
+    text-align: center;
+    padding: 2rem 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--color-bg);
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.setup-complete h2 {
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+}
+
+.loading-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--color-bg-secondary);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-cyan));
+    animation: loading 3s ease-in-out;
+}
+
+@keyframes loading {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}
+
+.setup-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
+.setup-footer p {
+    margin: 0.25rem 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .setup-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .setup-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .progress-step {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .progress-line {
+        width: 40px;
+    }
+
+    .setup-actions {
+        flex-direction: column;
+    }
+}

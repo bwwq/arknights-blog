@@ -1,5 +1,7 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import axios from 'axios';
+import config from './config';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
@@ -12,13 +14,14 @@ const Operators = lazy(() => import('./pages/Operators'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const BlogEditor = lazy(() => import('./pages/BlogEditor'));
+const Setup = lazy(() => import('./pages/Setup'));
 
 const LoadingFallback = () => (
   <div style={{
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
+    height: '100vh',
     color: 'var(--rhodes-cyan)',
     fontFamily: 'var(--font-mono)'
   }}>
@@ -27,6 +30,42 @@ const LoadingFallback = () => (
 );
 
 const App = () => {
+  const [isInitialized, setIsInitialized] = useState(null);
+  const [githubUsername, setGithubUsername] = useState('');
+
+  useEffect(() => {
+    // Check if system is initialized
+    axios.get(`${config.API_URL}/api/setup/status`)
+      .then(res => {
+        setIsInitialized(res.data.isInitialized);
+        setGithubUsername(res.data.githubUsername || '');
+      })
+      .catch(err => {
+        console.error('Failed to check setup status:', err);
+        setIsInitialized(false);
+      });
+  }, []);
+
+  const handleSetupComplete = (username) => {
+    setGithubUsername(username);
+    setIsInitialized(true);
+  };
+
+  // Show loading while checking initialization status
+  if (isInitialized === null) {
+    return <LoadingFallback />;
+  }
+
+  // Show setup wizard if not initialized
+  if (!isInitialized) {
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <Setup onComplete={handleSetupComplete} />
+      </Suspense>
+    );
+  }
+
+  // Show main app if initialized
   return (
     <AuthProvider>
       <ToastProvider>
@@ -36,7 +75,7 @@ const App = () => {
             {/* Top Status Bar */}
             <header className="app-header">
               <div className="text-mono text-gray">终端 // 系统就绪</div>
-              <div className="text-mono text-cyan">用户: 博士</div>
+              <div className="text-mono text-cyan">用户: {githubUsername || '博士'}</div>
             </header>
 
             <div className="content-scroll-area">

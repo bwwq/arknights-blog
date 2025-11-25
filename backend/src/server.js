@@ -48,6 +48,7 @@ import githubRouter from './routes/github.js';
 import blogRouter from './routes/blog.js';
 import authRouter from './routes/auth.js';
 import uploadRouter from './routes/upload.js';
+import setupRouter from './routes/setup.js';
 
 // Serve static files from public directory
 app.use(express.static('public'));
@@ -57,6 +58,7 @@ app.use('/api/github', githubRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/setup', setupRouter);
 
 // WebSocket for real-time server monitoring
 let monitoringInterval;

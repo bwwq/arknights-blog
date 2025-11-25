@@ -9,6 +9,21 @@ const Home = () => {
     const [time, setTime] = useState(new Date());
     const [githubData, setGithubData] = useState({ public_repos: '-', followers: '-' });
     const [hitokoto, setHitokoto] = useState({ hitokoto: '加载中...', from: '' });
+    const [stats, setStats] = useState({
+        cpu: 0,
+        mem: 0,
+        uptime: 0,
+        time: '--:--:--'
+    });
+    const [weeklyActivity, setWeeklyActivity] = useState([
+        { day: '周一', value: 0 },
+        { day: '周二', value: 0 },
+        { day: '周三', value: 0 },
+        { day: '周四', value: 0 },
+        { day: '周五', value: 0 },
+        { day: '周六', value: 0 },
+        { day: '周日', value: 0 }
+    ]);
 
     const [logs, setLogs] = useState([]);
 
@@ -25,7 +40,42 @@ const Home = () => {
         // Fetch GitHub Data
         axios.get(`${config.API_URL}/api/github/user`)
             .then(res => {
+                console.log('GitHub data:', res.data);
                 setGithubData(res.data);
+
+                // Fetch user events for activity stats
+                if (res.data.login) {
+                    return axios.get(`https://api.github.com/users/${res.data.login}/events/public?per_page=100`);
+                }
+            })
+            .then(eventsRes => {
+                if (eventsRes && eventsRes.data) {
+                    // Calculate weekly activity
+                    const now = new Date();
+                    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+                    const dayActivity = [0, 0, 0, 0, 0, 0, 0]; // Mon-Sun
+
+                    eventsRes.data.forEach(event => {
+                        const eventDate = new Date(event.created_at);
+                        if (eventDate >= weekAgo) {
+                            const dayIndex = (eventDate.getDay() + 6) % 7; // Convert to Mon=0, Sun=6
+                            dayActivity[dayIndex]++;
+                        }
+                    });
+
+                    // Normalize to percentage (max 100%)
+                    const maxActivity = Math.max(...dayActivity, 1);
+                    setWeeklyActivity([
+                        { day: '周一', value: Math.round((dayActivity[0] / maxActivity) * 100) },
+                        { day: '周二', value: Math.round((dayActivity[1] / maxActivity) * 100) },
+                        { day: '周三', value: Math.round((dayActivity[2] / maxActivity) * 100) },
+                        { day: '周四', value: Math.round((dayActivity[3] / maxActivity) * 100) },
+                        { day: '周五', value: Math.round((dayActivity[4] / maxActivity) * 100) },
+                        { day: '周六', value: Math.round((dayActivity[5] / maxActivity) * 100) },
+                        { day: '周日', value: Math.round((dayActivity[6] / maxActivity) * 100) }
+                    ]);
+                }
             })
             .catch(err => {
                 console.error('GitHub API Error:', err);
@@ -199,34 +249,12 @@ const Home = () => {
             <div className="rhodes-card contrib-card">
                 <h2 className="text-h2">活动统计</h2>
                 <div className="contrib-grid">
-                    <div className="contrib-item">
-                        <div className="contrib-bar" style={{ height: '40%' }}></div>
-                        <span className="contrib-label">周一</span>
-                    </div>
-                    <div className="contrib-item">
-                        <div className="contrib-bar" style={{ height: '70%' }}></div>
-                        <span className="contrib-label">周二</span>
-                    </div>
-                    <div className="contrib-item">
-                        <div className="contrib-bar" style={{ height: '55%' }}></div>
-                        <span className="contrib-label">周三</span>
-                    </div>
-                    <div className="contrib-item">
-                        <div className="contrib-bar" style={{ height: '85%' }}></div>
-                        <span className="contrib-label">周四</span>
-                    </div>
-                    <div className="contrib-item">
-                        <div className="contrib-bar" style={{ height: '60%' }}></div>
-                        <span className="contrib-label">周五</span>
-                    </div>
-                    <div className="contrib-item">
-                        <div className="contrib-bar" style={{ height: '30%' }}></div>
-                        <span className="contrib-label">周六</span>
-                    </div>
-                    <div className="contrib-item">
-                        <div className="contrib-bar" style={{ height: '20%' }}></div>
-                        <span className="contrib-label">周日</span>
-                    </div>
+                    {weeklyActivity.map((day, index) => (
+                        <div className="contrib-item" key={index}>
+                            <div className="contrib-bar" style={{ height: `${day.value}%` }}></div>
+                            <span className="contrib-label">{day.day}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
