@@ -20,12 +20,12 @@ const CSS_VARIABLES = [
 
 // Theme ID to CSS file mapping
 const THEME_CSS_MAP = {
-    'arknights': '/src/styles/arknights-theme.css',
-    'plain': '/src/styles/plain-theme.css',
-    'green': '/src/styles/green-theme.css',
-    'ocean': '/src/styles/ocean-theme.css',
-    'orange': '/src/styles/orange-theme.css',
-    'purple': '/src/styles/purple-theme.css'
+    'arknights': '/src/styles/arknights-theme.css', // This one is special, handled by App.jsx import
+    'plain': '/themes/plain-theme.css',
+    'green': '/themes/green-theme.css',
+    'ocean': '/themes/ocean-theme.css',
+    'orange': '/themes/orange-theme.css',
+    'purple': '/themes/purple-theme.css'
 };
 
 // Theme display names
