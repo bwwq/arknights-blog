@@ -7,7 +7,14 @@ import dotenv from 'dotenv';
 import os from 'os';
 import rateLimit from 'express-rate-limit';
 
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from project root (one level up from backend)
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const app = express();
 const server = createServer(app);
