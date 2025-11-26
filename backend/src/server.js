@@ -19,6 +19,7 @@ const io = new Server(server, {
 });
 
 app.use(cors());
+app.set('trust proxy', 1); // Enable trust proxy for Nginx/Reverse Proxy
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
