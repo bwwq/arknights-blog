@@ -68,12 +68,6 @@ router.post('/verify', (req, res) => {
         return res.status(400).json({ error: '尚未设置密钥' });
     }
 
-    console.log('--- Login Debug ---');
-    console.log('Input:', password ? '***' + password.slice(-3) : 'undefined');
-    console.log('Env:', process.env.ADMIN_PASSWORD ? '***' + process.env.ADMIN_PASSWORD.slice(-3) : 'undefined');
-    console.log('Match:', password === process.env.ADMIN_PASSWORD);
-    console.log('-------------------');
-
     if (password === process.env.ADMIN_PASSWORD) {
         res.json({ success: true });
     } else {
