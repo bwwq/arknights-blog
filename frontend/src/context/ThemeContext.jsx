@@ -144,7 +144,7 @@ export const ThemeProvider = ({ children }) => {
                 { activeTheme: currentTheme },
                 {
                     headers: {
-                        'x-admin-password': localStorage.getItem('adminPassword')
+                        'x-admin-password': localStorage.getItem('admin_password')
                     }
                 }
             );
@@ -167,7 +167,7 @@ export const ThemeProvider = ({ children }) => {
                 { name, colors },
                 {
                     headers: {
-                        'x-admin-password': localStorage.getItem('adminPassword')
+                        'x-admin-password': localStorage.getItem('admin_password')
                     }
                 }
             );
@@ -193,7 +193,7 @@ export const ThemeProvider = ({ children }) => {
                 `${config.API_URL}/api/theme/scheme/${encodeURIComponent(name)}`,
                 {
                     headers: {
-                        'x-admin-password': localStorage.getItem('adminPassword')
+                        'x-admin-password': localStorage.getItem('admin_password')
                     }
                 }
             );
