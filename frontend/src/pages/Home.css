@@ -232,9 +232,11 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    height: 100px;
+    height: 140px;
+    /* Increased height to prevent overflow */
     margin-top: var(--space-md);
     gap: 4px;
+    padding-bottom: 4px;
 }
 
 .contrib-item {
