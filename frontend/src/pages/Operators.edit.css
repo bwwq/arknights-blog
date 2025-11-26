@@ -1,0 +1,345 @@
+/* Operators Edit Mode Styles */
+
+/* Fix portrait overlay position & Remove shadow in edit mode */
+.operator-name-overlay {
+    position: absolute !important;
+    /* Revert to absolute to stay within portrait section */
+    bottom: 80px;
+    /* Increase margin to be safe */
+    left: 80px;
+    max-width: calc(100% - 100px);
+    text-shadow: none !important;
+    z-index: 50;
+}
+
+/* Redesigned Admin Actions - Minimalist Floating Button */
+.operator-actions {
+    position: fixed;
+    bottom: 30px;
+    right: 630px;
+    /* Align with data panel edge */
+    z-index: 200;
+    display: flex;
+    gap: 12px;
+    background: transparent;
+    padding: 0;
+    border: none;
+    backdrop-filter: none;
+}
+
+.operator-actions .rhodes-btn {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    min-width: auto;
+    padding: 10px 20px;
+    border-radius: 30px;
+    /* Pill shape */
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.operator-actions .rhodes-btn:hover {
+    background: var(--rhodes-cyan);
+    color: #000;
+    border-color: var(--rhodes-cyan);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(35, 173, 229, 0.4);
+}
+
+.operator-actions .rhodes-btn.primary {
+    background: rgba(35, 173, 229, 0.2);
+    color: var(--rhodes-cyan);
+    border-color: rgba(35, 173, 229, 0.3);
+}
+
+.operator-actions .rhodes-btn.primary:hover {
+    background: var(--rhodes-cyan);
+    color: #000;
+}
+
+/* Portrait upload button - better position */
+.portrait-upload-overlay {
+    position: fixed;
+    bottom: 140px;
+    left: 20px;
+    z-index: 30;
+}
+
+.upload-btn {
+    background: rgba(35, 173, 229, 0.9) !important;
+    color: #000 !important;
+    font-weight: 700;
+    border: none !important;
+    padding: 14px 28px !important;
+    font-size: 16px !important;
+    box-shadow: 0 4px 12px rgba(35, 173, 229, 0.3);
+}
+
+.upload-btn:hover {
+    background: rgba(35, 173, 229, 1) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(35, 173, 229, 0.5);
+}
+
+/* Improved data panel for editing */
+.data-section {
+    width: 600px !important;
+    max-height: 100vh;
+    overflow-y: auto;
+    padding-top: 70px !important;
+}
+
+/* Better input styles */
+.rhodes-input {
+    background: #1a1a1a;
+    border: 1px solid #444;
+    color: var(--rhodes-white);
+    padding: 10px 14px;
+    font-family: var(--font-main);
+    font-size: 14px;
+    width: 100%;
+    transition: all 0.2s;
+    border-radius: 2px;
+}
+
+.rhodes-input:focus {
+    outline: none;
+    border-color: var(--rhodes-cyan);
+    background: #222;
+    box-shadow: 0 0 0 2px rgba(35, 173, 229, 0.15);
+}
+
+.rhodes-input::placeholder {
+    color: var(--rhodes-gray-dim);
+    font-style: italic;
+}
+
+/* Name inputs - Transparent background fix */
+.name-input.en-name {
+    font-family: var(--font-display);
+    font-size: 42px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 900;
+    padding: 0;
+    height: auto;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.name-input.en-name:focus {
+    background: transparent;
+    border-bottom-color: var(--rhodes-cyan);
+    box-shadow: none;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.name-input.cn-name {
+    font-family: var(--font-serif);
+    font-size: 32px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    font-weight: 700;
+    padding: 0;
+    height: auto;
+}
+
+.name-input.cn-name:focus {
+    background: transparent;
+    border-bottom-color: var(--rhodes-cyan);
+    box-shadow: none;
+}
+
+/* Stat input */
+.stat-input {
+    width: 70px;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--rhodes-cyan);
+    padding: 6px 10px;
+}
+
+/* Section header with add button */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.add-btn {
+    font-size: 13px;
+    padding: 8px 16px;
+    background: var(--rhodes-gray-dim);
+    color: var(--rhodes-white);
+    font-weight: 600;
+}
+
+.add-btn:hover {
+    background: var(--rhodes-cyan);
+    color: #000;
+}
+
+/* Delete button */
+.delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 69, 0, 0.9);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10;
+    font-weight: bold;
+}
+
+.delete-btn:hover {
+    background: rgb(255, 69, 0);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(255, 69, 0, 0.5);
+}
+
+.skill-delete {
+    top: 12px;
+    right: 12px;
+}
+
+/* Talent inputs */
+.talent-item {
+    position: relative;
+}
+
+.talent-info {
+    flex: 1;
+}
+
+.talent-name-input {
+    font-family: var(--font-display);
+    font-size: 16px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.talent-desc-input {
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* Skill inputs */
+.add-skill-btn {
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.skill-item {
+    position: relative;
+}
+
+.skill-name-input {
+    font-family: var(--font-display);
+    font-size: 18px;
+    flex: 1;
+    margin-right: 12px;
+    font-weight: 600;
+}
+
+.skill-sp-input {
+    width: 90px;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    color: var(--rhodes-orange);
+    text-align: right;
+    font-weight: 700;
+}
+
+.skill-type-input,
+.skill-duration-input {
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    background: #1a1a1a;
+    flex: 1;
+}
+
+.skill-desc-input {
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    margin-top: 12px;
+    min-height: 80px;
+}
+
+/* Lore input */
+.lore-input {
+    font-family: var(--font-serif);
+    line-height: 1.8;
+    font-size: 15px;
+    resize: vertical;
+    min-height: 250px;
+    margin-bottom: 32px;
+}
+
+/* Meta input */
+.meta-input {
+    font-family: var(--font-display);
+    font-size: 16px;
+}
+
+/* Disabled state */
+.rhodes-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 1024px) {
+    .operator-actions {
+        right: 20px;
+        bottom: 20px;
+        top: auto;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .operator-actions .rhodes-btn {
+        min-width: auto;
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .data-section {
+        width: 100% !important;
+        padding-top: 20px !important;
+        padding-bottom: 80px !important;
+    }
+
+    .operator-name-overlay {
+        max-width: 80%;
+    }
+}

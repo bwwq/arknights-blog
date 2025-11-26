@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import ThemeSelector from './ThemeSelector';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -53,6 +54,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="sidebar-footer">
+                    <ThemeSelector />
                     <div className="status-dot online"></div>
                     <span className="version">v2.0.0</span>
                 </div>

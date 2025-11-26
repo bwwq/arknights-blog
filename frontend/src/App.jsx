@@ -4,6 +4,7 @@ import axios from 'axios';
 import config from './config';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './components/Toast';
 import ArknightsLoader from './components/ArknightsLoader';
 import './styles/arknights-theme.css';
@@ -85,34 +86,36 @@ const App = () => {
 
         // Show main app if initialized
         return (
-            <AuthProvider>
-                <ToastProvider>
-                    <div className="app-container">
-                        <Navbar />
-                        <main className="main-content">
-                            {/* Top Status Bar */}
-                            <header className="app-header">
-                                <div className="text-mono text-gray">终端 // 系统就绪</div>
-                                <div className="text-mono text-cyan">用户: {githubUsername || '博士'}</div>
-                            </header>
+            <ThemeProvider>
+                <AuthProvider>
+                    <ToastProvider>
+                        <div className="app-container">
+                            <Navbar />
+                            <main className="main-content">
+                                {/* Top Status Bar */}
+                                <header className="app-header">
+                                    <div className="text-mono text-gray">终端 // 系统就绪</div>
+                                    <div className="text-mono text-cyan">用户: {githubUsername || '博士'}</div>
+                                </header>
 
-                            <div className="content-scroll-area">
-                                <Suspense fallback={<LoadingFallback />}>
-                                    <Routes>
-                                        <Route path="/" element={<Home />} />
-                                        <Route path="/monitor" element={<Monitor />} />
-                                        <Route path="/operators" element={<Operators />} />
-                                        <Route path="/blog" element={<Blog />} />
-                                        <Route path="/blog/new" element={<BlogEditor />} />
-                                        <Route path="/blog/:id" element={<BlogPost />} />
-                                        <Route path="/blog/:id/edit" element={<BlogEditor />} />
-                                    </Routes>
-                                </Suspense>
-                            </div>
-                        </main>
-                    </div>
-                </ToastProvider>
-            </AuthProvider>
+                                <div className="content-scroll-area">
+                                    <Suspense fallback={<LoadingFallback />}>
+                                        <Routes>
+                                            <Route path="/" element={<Home />} />
+                                            <Route path="/monitor" element={<Monitor />} />
+                                            <Route path="/operators" element={<Operators />} />
+                                            <Route path="/blog" element={<Blog />} />
+                                            <Route path="/blog/new" element={<BlogEditor />} />
+                                            <Route path="/blog/:id" element={<BlogPost />} />
+                                            <Route path="/blog/:id/edit" element={<BlogEditor />} />
+                                        </Routes>
+                                    </Suspense>
+                                </div>
+                            </main>
+                        </div>
+                    </ToastProvider>
+                </AuthProvider>
+            </ThemeProvider>
         );
     };
 

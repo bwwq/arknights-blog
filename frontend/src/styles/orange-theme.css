@@ -1,0 +1,26 @@
+/* Orange Theme - 暖阳橙（温暖活力） */
+:root {
+    /* Generic Variables */
+    --bg-black: #fff8f0;
+    --bg-dark: #ffeedd;
+    --bg-panel: #fffbf5;
+    --border-color: #e8d5bb;
+    --accent-primary: #ff7b54;
+    --accent-secondary: #ffb26b;
+    --text-primary: #3d3226;
+    --text-secondary: #7d6b57;
+
+    /* Rhodes Compatibility Mapping */
+    --rhodes-black: var(--bg-black);
+    --rhodes-dark-bg: var(--bg-dark);
+    --rhodes-panel-bg: var(--bg-panel);
+    --rhodes-border: var(--border-color);
+
+    --rhodes-cyan: var(--accent-primary);
+    --rhodes-cyan-dim: rgba(255, 123, 84, 0.15);
+    --rhodes-orange: #ff9f43;
+
+    --rhodes-white: var(--text-primary);
+    --rhodes-gray: var(--text-secondary);
+    --rhodes-gray-dim: rgba(125, 107, 87, 0.5);
+}

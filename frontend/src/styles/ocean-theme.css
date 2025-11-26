@@ -1,0 +1,26 @@
+/* Ocean Theme - 深海蓝（专注深色） */
+:root {
+    /* Generic Variables */
+    --bg-black: #0d1117;
+    --bg-dark: #161b22;
+    --bg-panel: #1f2937;
+    --border-color: #30363d;
+    --accent-primary: #58a6ff;
+    --accent-secondary: #79c0ff;
+    --text-primary: #c9d1d9;
+    --text-secondary: #8b949e;
+
+    /* Rhodes Compatibility Mapping */
+    --rhodes-black: var(--bg-black);
+    --rhodes-dark-bg: var(--bg-dark);
+    --rhodes-panel-bg: var(--bg-panel);
+    --rhodes-border: var(--border-color);
+
+    --rhodes-cyan: var(--accent-primary);
+    --rhodes-cyan-dim: rgba(88, 166, 255, 0.15);
+    --rhodes-orange: #d29922;
+
+    --rhodes-white: var(--text-primary);
+    --rhodes-gray: var(--text-secondary);
+    --rhodes-gray-dim: #484f58;
+}

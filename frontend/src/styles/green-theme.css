@@ -1,0 +1,26 @@
+/* Green Theme - 护眼绿（清新舒适） */
+:root {
+    /* Generic Variables */
+    --bg-black: #f0f5f0;
+    --bg-dark: #e3ebe3;
+    --bg-panel: #f8fdf8;
+    --border-color: #c9d9c9;
+    --accent-primary: #4a9d5f;
+    --accent-secondary: #6b8e7f;
+    --text-primary: #2d3d2d;
+    --text-secondary: #5a6f5a;
+
+    /* Rhodes Compatibility Mapping */
+    --rhodes-black: var(--bg-black);
+    --rhodes-dark-bg: var(--bg-dark);
+    --rhodes-panel-bg: var(--bg-panel);
+    --rhodes-border: var(--border-color);
+
+    --rhodes-cyan: var(--accent-primary);
+    --rhodes-cyan-dim: rgba(74, 157, 95, 0.15);
+    --rhodes-orange: #e6a23c;
+
+    --rhodes-white: var(--text-primary);
+    --rhodes-gray: var(--text-secondary);
+    --rhodes-gray-dim: rgba(90, 111, 90, 0.5);
+}

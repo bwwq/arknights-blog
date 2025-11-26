@@ -1,0 +1,28 @@
+/* Plain Theme - 素色（纸质书籍风） */
+:root {
+    /* Generic Variables */
+    --bg-black: #f5f2ed;
+    --bg-dark: #ebe6dd;
+    --bg-panel: #ffffff;
+    --border-color: #d4c9b8;
+    --accent-primary: #d97757;
+    --accent-secondary: #8b7355;
+    --text-primary: #3a3229;
+    --text-secondary: #7a6f5f;
+
+    /* Rhodes Compatibility Mapping */
+    --rhodes-black: var(--bg-black);
+    --rhodes-dark-bg: var(--bg-dark);
+    --rhodes-panel-bg: var(--bg-panel);
+    --rhodes-border: var(--border-color);
+
+    --rhodes-cyan: var(--accent-primary);
+    --rhodes-cyan-dim: rgba(217, 119, 87, 0.15);
+    /* accent-primary with opacity */
+    --rhodes-orange: #e6a23c;
+    /* Warning color */
+
+    --rhodes-white: var(--text-primary);
+    --rhodes-gray: var(--text-secondary);
+    --rhodes-gray-dim: rgba(122, 111, 95, 0.5);
+}

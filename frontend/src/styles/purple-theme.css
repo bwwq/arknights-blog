@@ -1,0 +1,26 @@
+/* Purple Theme - 夜幕紫（优雅神秘） */
+:root {
+    /* Generic Variables */
+    --bg-black: #1a1625;
+    --bg-dark: #251f3a;
+    --bg-panel: #2d2640;
+    --border-color: #3d3354;
+    --accent-primary: #a78bfa;
+    --accent-secondary: #c4b5fd;
+    --text-primary: #e5e7eb;
+    --text-secondary: #9ca3af;
+
+    /* Rhodes Compatibility Mapping */
+    --rhodes-black: var(--bg-black);
+    --rhodes-dark-bg: var(--bg-dark);
+    --rhodes-panel-bg: var(--bg-panel);
+    --rhodes-border: var(--border-color);
+
+    --rhodes-cyan: var(--accent-primary);
+    --rhodes-cyan-dim: rgba(167, 139, 250, 0.15);
+    --rhodes-orange: #f59e0b;
+
+    --rhodes-white: var(--text-primary);
+    --rhodes-gray: var(--text-secondary);
+    --rhodes-gray-dim: #4b5563;
+}

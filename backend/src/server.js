@@ -49,6 +49,7 @@ import blogRouter from './routes/blog.js';
 import authRouter from './routes/auth.js';
 import uploadRouter from './routes/upload.js';
 import setupRouter from './routes/setup.js';
+import themeRouter from './routes/theme.js';
 
 // Serve static files from public directory
 app.use(express.static('public'));
@@ -59,6 +60,7 @@ app.use('/api/blogs', blogRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/setup', setupRouter);
+app.use('/api/theme', themeRouter);
 
 // WebSocket for real-time server monitoring
 io.on('connection', async (socket) => {

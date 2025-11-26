@@ -9,7 +9,7 @@
     transition: width 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
     transition-delay: 0s;
     /* Immediate collapse */
-    overflow: hidden;
+    /* overflow: hidden; Removed to allow theme menu popup */
     position: relative;
 }
 
@@ -26,6 +26,8 @@
     justify-content: center;
     border-bottom: var(--border-thin);
     flex-shrink: 0;
+    overflow: hidden;
+    /* Keep header content contained */
 }
 
 .logo-box {
@@ -44,6 +46,9 @@
     flex-direction: column;
     gap: var(--space-xs);
     overflow-x: hidden;
+    /* Keep menu items contained horizontally */
+    overflow-y: auto;
+    /* Allow vertical scrolling if needed */
 }
 
 .menu-item {
@@ -103,7 +108,7 @@
     padding: 0 20px;
     gap: 12px;
     flex-shrink: 0;
-    overflow: hidden;
+    /* overflow: hidden; Removed to allow theme menu popup */
 }
 
 .status-dot {
@@ -112,6 +117,8 @@
     border-radius: 50%;
     background: var(--rhodes-gray);
     flex-shrink: 0;
+    display: none;
+    /* Hide by default to save space */
 }
 
 .status-dot.online {
@@ -123,12 +130,22 @@
     font-family: var(--font-mono);
     font-size: 10px;
     color: var(--rhodes-gray-dim);
-    opacity: 0;
     white-space: nowrap;
+    display: none;
+    /* Hide by default */
+}
+
+.rhodes-sidebar:hover .status-dot {
+    display: block;
 }
 
 .rhodes-sidebar:hover .version {
+    display: block;
+}
+
+.rhodes-sidebar:hover .theme-name {
     opacity: 1;
+    transform: translateX(0);
 }
 
 /* ==================== Mobile Navigation ==================== */
@@ -228,5 +245,17 @@
 
     .version {
         opacity: 1;
+        display: block;
+        /* Always show on mobile */
+    }
+
+    .status-dot {
+        display: block;
+        /* Always show on mobile */
+    }
+
+    .theme-name {
+        opacity: 1;
+        transform: translateX(0);
     }
 }

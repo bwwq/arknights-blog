@@ -1,5 +1,9 @@
 {
   "isInitialized": false,
   "githubUsername": "",
-  "initializedAt": null
+  "initializedAt": null,
+  "theme": {
+    "activeTheme": "arknights",
+    "customSchemes": {}
+  }
 }

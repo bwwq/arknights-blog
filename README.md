@@ -25,7 +25,11 @@
   - 自动同步个人资料与仓库列表。
   - **真实活动统计**：直观展示最近的 GitHub 贡献动态（支持 API 限流自动降级）。
 - **📝 Markdown 博客**：内置 SimpleMDE 编辑器，支持图片上传、标签管理。
-- **🎮 干员档案**：精美的角色展示页面，还原游戏内档案查看体验。
+- **🎮 干员档案系统 (New!)**：
+  - **完全可编辑**：直接在页面上修改干员的属性、技能、天赋和档案资料。
+  - **自定义职业与星级**：不再受限于预设，想填什么就填什么。
+  - **立绘上传**：支持拖拽上传自定义立绘，自动适配背景。
+  - **所见即所得**：编辑模式下实时预览修改效果。
 
 ---
 
@@ -136,13 +140,13 @@ GITHUB_TOKEN=ghp_xxxxxx
 arknights-blog/
 ├── backend/                 # 后端服务
 │   ├── src/
-│   │   ├── routes/          # API 路由 (GitHub, Setup, Monitor...)
+│   │   ├── routes/          # API 路由 (GitHub, Setup, Monitor, Operators...)
 │   │   └── server.js        # 入口文件
 │   └── data/                # 本地数据存储
 ├── frontend/                # 前端应用
 │   ├── src/
 │   │   ├── components/      # 复用组件 (Navbar, Cards...)
-│   │   ├── pages/           # 页面 (Home, Blog, Setup...)
+│   │   ├── pages/           # 页面 (Home, Blog, Setup, Operators...)
 │   │   └── styles/          # 全局样式与主题变量
 ├── start.bat                # Windows 启动脚本
 └── deploy.sh                # Linux 部署脚本

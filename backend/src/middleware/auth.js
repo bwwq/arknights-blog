@@ -19,4 +19,5 @@ const requireAuth = (req, res, next) => {
     }
 };
 
+export { requireAuth as authenticateAdmin };
 export default requireAuth;
