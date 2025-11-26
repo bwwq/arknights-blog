@@ -70,9 +70,9 @@ router.get('/', (req, res) => {
     // Filter by search query
     if (search) {
         blogs = blogs.filter(blog =>
-            blog.title.toLowerCase().includes(search) ||
-            blog.content.toLowerCase().includes(search) ||
-            (blog.tags && blog.tags.some(tag => tag.toLowerCase().includes(search)))
+            (blog.title && blog.title.toLowerCase().includes(search)) ||
+            (blog.content && blog.content.toLowerCase().includes(search)) ||
+            (blog.tags && blog.tags.some(tag => tag && tag.toLowerCase().includes(search)))
         );
     }
 
